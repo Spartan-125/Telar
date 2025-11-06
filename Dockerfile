@@ -1,7 +1,7 @@
 # Dockerfile
 FROM php:8.1-fpm
 
-# Instalar dependencias del sistema incluyendo PostgreSQL
+# Instalar dependencias
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 # Limpiar cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones de PHP (ahora con pdo_pgsql)
+# Instalar extensiones de PHP
 RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Instalar Composer
@@ -28,13 +28,12 @@ WORKDIR /app
 COPY . .
 
 # Instalar dependencias de PHP
-RUN composer install --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader
 
 # Exponer puerto
 EXPOSE 8080
 
-# Comando de inicio - SIN CACHE
+# Iniciar SIN migraciones
 CMD php artisan config:clear && \
     php artisan cache:clear && \
-    php artisan migrate --seed --force && \
     php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
