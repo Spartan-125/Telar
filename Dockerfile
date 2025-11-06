@@ -30,11 +30,11 @@ COPY . .
 # Instalar dependencias de PHP
 RUN composer install --optimize-autoloader
 
-# Generar caches
-RUN php artisan config:cache && php artisan route:cache
-
 # Exponer puerto
 EXPOSE 8080
 
-# Comando de inicio
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# Comando de inicio - SIN CACHE
+CMD php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan migrate --seed --force && \
+    php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
