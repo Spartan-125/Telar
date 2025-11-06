@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . .
 
 # Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Exponer puerto
 EXPOSE 8080
