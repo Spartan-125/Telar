@@ -27,7 +27,7 @@ WORKDIR /app
 COPY . .
 
 # Instalar dependencias
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Generar caches
 RUN php artisan config:cache && php artisan route:cache
